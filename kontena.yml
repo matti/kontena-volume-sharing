@@ -1,0 +1,17 @@
+version: 2
+
+services:
+  first:
+    image: alpine:3.4
+    instances: 1
+    command: sh -c "while true; do date | tee /data/first.log; sleep 1; done"
+    volumes:
+      - kontena-volume-sharing-data:/data
+  second:
+    image: alpine:3.4
+    instances: 1
+    command: sh -c "while true; do printf 'contents '; tail -n 1 /data/first.log; sleep 1; done"
+    volumes:
+      - kontena-volume-sharing-data:/data
+    affinity:
+      - service==kontena-volume-sharing-first
